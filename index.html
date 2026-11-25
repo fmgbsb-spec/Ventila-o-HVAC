@@ -29,7 +29,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Ventilação HVAC</title>
 <style>
-/* ==== plataforma v0.7.0: css/base.css ==== */
+/* ==== plataforma v0.8.0: css/base.css ==== */
 /* ---- importado: fontes.css ---- */
 /* Fontes embutidas (gerado por _plataforma-hvac\codigo\ferramentas\gera_fontes.py; não editar à mão).
    Arquivos woff2 do Google Fonts, subconjunto latin, sem alteração; letras fora dele usam a fonte seguinte da lista.
@@ -520,7 +520,7 @@ button.kpi-c:hover { border-color: var(--prim); }
 
 </style>
 <style>
-/* ==== plataforma v0.7.0: css/impressao.css ==== */
+/* ==== plataforma v0.8.0: css/impressao.css ==== */
 /* Plataforma HVAC: memorial em formato de folha e regras de impressão (o PDF sai pela impressão do navegador). */
 /* v0.5.0: a folha é papel e não flutua (sem sombra, só a borda); dentro dela ficam as fontes e os pesos da v0.4.1, para o PDF
    sair igual (a tela troca para IBM Plex; o memorial muda de fonte só numa etapa própria, com o Francisco) */
@@ -654,7 +654,7 @@ main:has(.tab-larga) { max-width: 1340px; }
 </head>
 <body>
 <script>
-/* ==== plataforma v0.7.0: js/interface/pagina.js ==== */
+/* ==== plataforma v0.8.0: js/interface/pagina.js ==== */
 /* Plataforma HVAC. Página comum: topo (marca, modo aprendizado, tema, comandos), trilha, área da tela, faixa de resultado,
    camada sobre a tela, campo de arquivo e captura de erro de JavaScript. Desde a v0.4.0, também o botão Menu, a barra de
    passos e o balão de dica do celular: nascem ocultos (base.css) e só aparecem em tela estreita.
@@ -663,7 +663,7 @@ main:has(.tab-larga) { max-width: 1340px; }
 window.HVAC = window.HVAC || {};
 (function (H) {
   'use strict';
-  H.plataforma = { versao: '0.7.0' };   // o build do app grava aqui a versão de _plataforma-hvac\codigo\VERSAO.txt
+  H.plataforma = { versao: '0.8.0' };   // o build do app grava aqui a versão de _plataforma-hvac\codigo\VERSAO.txt
 
   /* Erro de JavaScript fica visível na página (e aparece no teste automático) */
   window.onerror = function (msg, arq, linha) {
@@ -700,12 +700,12 @@ window.HVAC = window.HVAC || {};
 
 </script>
 <script>
-/* ==== plataforma v0.7.0: js/nucleo.js ==== */
+/* ==== plataforma v0.8.0: js/nucleo.js ==== */
 /* Namespace único do app. Módulos: dados (tabelas), util, motor (cálculo, sem DOM), ui (tela). */
 window.HVAC = window.HVAC || {};
 (function (H) {
   'use strict';
-  H.versao = '0.4.0';
+  H.versao = '0.5.0';
   H.dados = H.dados || {};
   H.util = H.util || {};
   H.motor = H.motor || {};
@@ -714,7 +714,7 @@ window.HVAC = window.HVAC || {};
 
 </script>
 <script>
-/* ==== plataforma v0.7.0: js/util/formatacao.js ==== */
+/* ==== plataforma v0.8.0: js/util/formatacao.js ==== */
 /* Formatação numérica (padrão brasileiro: vírgula decimal) e utilidades de texto. */
 (function (H) {
   'use strict';
@@ -1689,7 +1689,7 @@ window.HVAC = window.HVAC || {};
 
 </script>
 <script>
-/* ==== plataforma v0.7.0: js/interface/componentes.js ==== */
+/* ==== plataforma v0.8.0: js/interface/componentes.js ==== */
 /* Plataforma HVAC. Componentes do guia de interface: campo com estado, selos, valor calculado, seletor, segmentado, passos,
    cabeçalho de tela, indicador, bloco recolhível, barras, tabela de passos e, desde a v0.4.0, a lista de cartões do celular.
    Só montam HTML; não conhecem app nem motor.
@@ -1851,7 +1851,7 @@ window.HVAC = window.HVAC || {};
 
 </script>
 <script>
-/* ==== plataforma v0.7.0: js/interface/casca.js ==== */
+/* ==== plataforma v0.8.0: js/interface/casca.js ==== */
 /* Plataforma HVAC. Casca comum dos apps: estado, armazenamento, rotas, trilha, faixa de resultado, gaveta, janela, paleta de comandos,
    tema, modo aprendizado, arquivo de projeto com relatório de importação e impressão do memorial; desde a v0.4.0, o celular
    (Menu, barra de passos, Voltar, dica por toque, tabelas que rolam, memorial em escala, teclado), só com a tela estreita.
@@ -1865,8 +1865,10 @@ window.HVAC = window.HVAC || {};
   var A = null;                               // manifesto do app (H.app)
   var E = null;                               // projeto (o que vai para o arquivo)
   var U = H.ui.U = {                          // estado da tela (não vai para o arquivo); o app acrescenta os seus campos em H.app.estado
-    tela: 'inicio', temIndice: false, aberto: {}, aprender: false, tema: 'claro', erros: {}, delta: 0, sobre: null, paleta: null
+    tela: 'inicio', temIndice: false, aberto: {}, aprender: false, tema: 'claro', erros: {}, delta: 0, sobre: null, paleta: null,
+    memorial: ''                              // v0.8.0: 'resumido' enquanto a folha resumida é impressa (ou com ?memorial=resumido); '' = completo
   };
+  var voltarAoCompleto = false;               // v0.8.0: depois de imprimir o resumido pela janela, a tela volta ao completo
   var clicarDepois = null;                    // seletor do parâmetro de teste ?clicar=, à espera do próximo desenho
   var digitarDepois = null;                   // "<id>:<valor>" do parâmetro de teste ?digitar=, à espera do próximo desenho
   var despejar = false;                       // parâmetro de teste ?despejar=1: o texto do arquivo vai para a página a cada desenho
@@ -1990,7 +1992,8 @@ window.HVAC = window.HVAC || {};
   }
 
   // ------------------------------------------------------------ rotas: #/tela/indice?chave=valor
-  /* Parâmetros de endereço da casca (usados em testes e capturas): importar, bloco, tema, aprender, conta, clicar, digitar, despejar.
+  /* Parâmetros de endereço da casca (usados em testes e capturas): importar, bloco, tema, aprender, conta, clicar, digitar, despejar,
+     memorial (v0.8.0: "resumido" mostra a folha resumida, para conferir e gerar o PDF por --print-to-pdf).
      Os do app ficam em A.parametros = { nome: function (valor, U) }; se o app declara "clicar", "digitar" ou "despejar", vale o dele
      e a casca não age nesse parâmetro. */
   function lerRota() {
@@ -2016,6 +2019,7 @@ window.HVAC = window.HVAC || {};
         try { digitarDepois = decodeURIComponent(kv[1]); } catch (e) { digitarDepois = null; }
       }
       if (kv[0] === 'despejar' && !tem(A.parametros, 'despejar')) despejar = kv[1] === '1';
+      if (kv[0] === 'memorial' && !tem(A.parametros, 'memorial')) U.memorial = kv[1] === 'resumido' ? 'resumido' : '';
     });
   }
   // ?digitar=<id do campo>:<valor>: escreve o valor no elemento e dispara o evento de alteração, que é o caminho de quem digita na tela;
@@ -2032,11 +2036,15 @@ window.HVAC = window.HVAC || {};
     if (!pre) { pre = document.createElement('pre'); pre.id = 'despejo'; pre.hidden = true; document.body.appendChild(pre); }
     pre.textContent = textoArquivo();
   }
-  // ?clicar=<seletor CSS>: clica no primeiro elemento que casa com o seletor; seletor inválido ou elemento ausente são ignorados
+  // ?clicar=<seletor CSS>: clica no primeiro elemento que casa com o seletor; seletor inválido ou elemento ausente são ignorados.
+  // v0.8.0: "<seletor 1>||<seletor 2>" clica no segundo depois do desenho que o primeiro clique provocou (janela que abre outra)
   function clicar(valor) {
-    var el;
-    try { el = document.querySelector(decodeURIComponent(valor)); } catch (e) { el = null; }
-    if (el) el.click();
+    var el, txt, i;
+    try { txt = decodeURIComponent(valor); } catch (e) { return; }
+    i = txt.indexOf('||');
+    if (i >= 0) { clicarDepois = encodeURIComponent(txt.slice(i + 2)); txt = txt.slice(0, i); }
+    try { el = document.querySelector(txt); } catch (e) { el = null; }
+    if (el) el.click(); else clicarDepois = null;
   }
 
   // ------------------------------------------------------------ desenho
@@ -2076,7 +2084,8 @@ window.HVAC = window.HVAC || {};
     document.getElementById('faixa').className = hf ? 'faixa' : 'oculto';
     document.getElementById('b-aprender').setAttribute('aria-pressed', U.aprender);
     document.getElementById('b-tema').textContent = U.tema === 'escuro' ? 'Tema claro' : 'Tema escuro';
-    document.title = A.titulo ? A.titulo(E) : ((E.projeto && E.projeto.nome || 'Projeto') + ' · ' + A.nome);
+    document.title = (A.titulo ? A.titulo(E) : ((E.projeto && E.projeto.nome || 'Projeto') + ' · ' + A.nome)) +
+      (U.memorial === 'resumido' && rota.imprime ? ' - resumido' : '');   // v0.8.0: nome do PDF salvo
     desenharSobre();
     ajustarCelular(R);
     if (focoId) {
@@ -2166,7 +2175,22 @@ window.HVAC = window.HVAC || {};
     if (!rotaQueImprime()) return;
     var L = A.faltaPreencher ? A.faltaPreencher(E, A.calcular ? A.calcular(E) : null) || [] : [];
     if (L.length) { U.sobre = { tipo: 'janela', html: htmlFaltaPreencher(L), falta: L }; return; }
-    imprimir();
+    escolherVersao(false);
+  }
+  /* v0.8.0: com A.memorialResumido, a janela "Gerar PDF" pergunta a versão ("Completo" ou "Resumido") antes de imprimir; vem depois
+     da janela "Falta preencher", quando ela abre. O resumido é a mesma rota com U.memorial = 'resumido': o app desenha a folha
+     resumida, a casca imprime e, no afterprint, volta ao completo. Sem o item, imprime direto, como na 0.7.0. */
+  function escolherVersao(depois) {
+    if (!A.memorialResumido) { U.sobre = null; imprimir(depois); return; }
+    U.sobre = { tipo: 'janela', html: '<h2>Gerar PDF</h2><div class="acoes" style="margin-top:14px">' +
+      '<button type="button" class="botao prim" data-acao="pdf-completo">Completo</button>' +
+      '<button type="button" class="botao" data-acao="pdf-resumido">Resumido</button></div>' };
+  }
+  function imprimirVersao(resumido) {
+    U.sobre = null;
+    U.memorial = resumido ? 'resumido' : '';
+    voltarAoCompleto = resumido;
+    imprimir(true);
   }
   /* Texto do arquivo de projeto como é salvo: o projeto, o envelope (formato, versaoFormato, versaoApp e, logo depois, versaoPlataforma)
      e os blocos que A.arquivo.aoSalvar(E, R) devolver (ex.: { resultados: {...} }). Os blocos entram só nesta cópia: E não os recebe.
@@ -2281,7 +2305,9 @@ window.HVAC = window.HVAC || {};
     paleta: function () { U.sobre = { tipo: 'paleta', busca: '', sel: 0 }; return 'paleta-busca'; },
     comando: function (el) { var c = comandosFiltrados()[+el.getAttribute('data-i')]; U.sobre = null; if (c) c.fn(); },
     pdf: gerarPdf,
-    'pdf-assim': function () { U.sobre = null; imprimir(true); },                     // v0.7.0: janela "Falta preencher"
+    'pdf-assim': function () { escolherVersao(true); },                               // v0.7.0: janela "Falta preencher"
+    'pdf-completo': function () { imprimirVersao(false); },                           // v0.8.0: janela "Gerar PDF"
+    'pdf-resumido': function () { imprimirVersao(true); },
     'pdf-ir': function (el) {
       var x = U.sobre && U.sobre.falta ? U.sobre.falta[+el.getAttribute('data-i')] : null;
       U.sobre = null;
@@ -2364,7 +2390,10 @@ window.HVAC = window.HVAC || {};
   function celular() { return !!estreita.matches; }
   var imprimindo = false;                     // a troca de mídia durante a impressão não redesenha a tela
   window.addEventListener('beforeprint', function () { imprimindo = true; });
-  window.addEventListener('afterprint', function () { imprimindo = false; });
+  window.addEventListener('afterprint', function () {
+    imprimindo = false;
+    if (voltarAoCompleto) { voltarAoCompleto = false; U.memorial = ''; desenhar(); }   // v0.8.0: o resumido só vale para aquela impressão
+  });
 
   // Menu (C1, C2): o que estava no topo e na paleta, em botões de 44 px; o seletor de arquivo fica sobre o botão (C12)
   function htmlMenu() {
@@ -2447,9 +2476,10 @@ window.HVAC = window.HVAC || {};
 
   // Memorial (v0.6.1, Francisco, 2026-11-17): no papel, cada tópico numerado ("3. Resumo") começa numa folha nova; o primeiro
   // de cada folha fica logo abaixo do cabeçalho. A classe só tem efeito na impressão (impressao.css); a tela não muda.
+  // v0.8.0: a folha com data-resumo (memorial resumido) corre contínua, sem folha nova por tópico.
   function marcarTopicos(raiz) {
     Array.prototype.forEach.call(raiz.querySelectorAll('.folha'), function (f) {
-      if (f.parentNode.closest('.folha')) return;
+      if (f.parentNode.closest('.folha') || f.hasAttribute('data-resumo')) return;
       var n = 0;
       Array.prototype.forEach.call(f.querySelectorAll('h2'), function (h) {
         if (/^\s*\d+\.\s/.test(h.textContent) && n++) h.classList.add('topico-folha');
@@ -3253,10 +3283,34 @@ window.HVAC = window.HVAC || {};
       topico1(E, R) + topico2(E, R) + topico3(E, R) + topico4(E, R) + '</article>';
   }
 
+  /* 0.5.0 (plataforma 0.8.0): memorial resumido, só resultados: identificação, balanço de ar e tabela de divisas por ambiente.
+     Sem bases, premissas, passos de conta, notas nem avisos. */
+  function topico1Resumo(E) {
+    var p = E.projeto;
+    return '<h2>1. Identificação</h2>' +
+      tabela([['Obra'], ['Cliente'], ['Local'], ['Responsável técnico'], ['Revisão']], [{ c: [esc(p.nome || '—'), esc(p.cliente || '—'), esc(p.local || '—'), esc(p.responsavel || '—'), esc(p.revisao || '—')] }]);
+  }
+  function topico3Resumo(E, R) {
+    var un = W.un(E);
+    return '<h2>3. Frestas e pressões</h2>' + E.ambientes.map(function (a, i) {
+      var r = R.amb[i];
+      return '<h3>' + esc(a.nome) + '</h3>' + tabela([['Vizinho'], ['Divisa'], ['Área de vazamento (m²)', 1], ['Diferença de pressão (Pa)', 1], ['Vazão que sai (' + un + ')', 1]],
+        r.divisas.map(function (d) { return { c: [esc(d.vizNome), esc(d.area.nome), f.num(d.A, 4), W.sinalP(d.dp), W.fq(E, d.Q)] }; }));
+    }).join('');
+  }
+  function folhaResumida(E, R) {
+    var p = E.projeto, plat = H.plataforma && H.plataforma.versao ? ' · plataforma ' + H.plataforma.versao : '';
+    return '<article class="folha" data-resumo="1">' +
+      '<div class="cab-f"><div><h1>Memorial de cálculo resumido de ventilação e pressões</h1><div>' + esc(p.nome || 'Projeto sem nome') + (p.cliente ? ' · ' + esc(p.cliente) : '') + (p.local ? ' · ' + esc(p.local) : '') + '</div></div>' +
+        '<div>Revisão ' + esc(p.revisao || '—') + '<br>Emitido em ' + hoje() + '<br>Ventilação HVAC v' + esc(H.versao || '') + esc(plat) + '</div></div>' +
+      '<p>Método, premissas e contas: memorial completo da mesma revisão.</p>' +
+      topico1Resumo(E) + topico4(E, R).replace('<h2>4. Balanço de ar</h2>', '<h2>2. Balanço de ar</h2>') + topico3Resumo(E, R) + '</article>';
+  }
+
   X.memorial = function (E, U, R) {
     return '<div class="nao-imprime">' + C.cabeca('Passo 4 de 4', 'Memorial', 'A folha para imprimir.') +
       '<div class="acoes" style="margin-bottom:16px"><button class="botao prim" data-acao="pdf">Gerar PDF</button><button class="botao" data-acao="salvar">Salvar projeto</button>' +
-        '<a class="botao leve" href="#/referencias">Ver referências</a></div>' + '</div>' + folha(E, R);
+        '<a class="botao leve" href="#/referencias">Ver referências</a></div>' + '</div>' + (U.memorial === 'resumido' ? folhaResumida(E, R) : folha(E, R));
   };
 })(window.HVAC);
 
@@ -3403,6 +3457,8 @@ window.HVAC = window.HVAC || {};
     ],
     // plataforma 0.7.0: o que falta preencher abre a janela da casca ao gerar o PDF (memorial.js)
     faltaPreencher: function (E, R) { return X.faltaPreencher(E, R); },
+    // plataforma 0.8.0: "Gerar PDF" pergunta Completo ou Resumido (memorial.js, folhaResumida)
+    memorialResumido: true,
 
     calcular: calc,
 
